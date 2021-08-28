@@ -1,7 +1,7 @@
 # FRIENDS QUIZ
 
-Created a quiz on the TV show FRIENDS through CLI with 3 different levels and scoring pattern.
+Created a NodeJS CLI quiz app on the TV show FRIENDS through CLI with 3 different levels and scoring pattern
 
-# Installation
+## NPM Libraries used:
 
-Download the files and upload on replit.com
+1. readline-sync
