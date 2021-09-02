@@ -1,7 +1,10 @@
 var readlineSync = require("readline-sync");
+const chalk = require('chalk');
 
-console.log("Welcome to the F.R.I.E.N.D.S quiz!!");
-console.log("\nQualification criteria: \n1)Get all n answers right to go to level 2\n2)Get n-1 answers right out of n to go to level 3\nPoints for right answers:\nLevel-1: 3\nLevel-2: 5\nLevel-3: 10\nAll the best beating the High Scores!!\n");
+var userName = readlineSync.question(chalk.blue("What is your Name? "));
+console.log(chalk.cyanBright("Welcome " + chalk.italic.yellowBright(userName) + " to the F.R.I.E.N.D.S quiz!!"));
+console.log(chalk.cyanBright("----------------------------------------"));
+console.log(chalk.bgCyan("\nQualification criteria: \n1)Get all n answers right to go to level 2\n2)Get n-1 answers right out of n to go to level 3\nPoints for right answers:\nLevel-1: 3\nLevel-2: 5\nLevel-3: 10\nAll the best beating the High Scores!!\n"));
 
 var eachLevelPoints = [3, 5, 10];
 
@@ -16,6 +19,18 @@ var highScore = [
   {
     name: "Malay",
     score: 69
+  },
+  {
+    name: "Chandler",
+    score: 64
+  },
+  {
+    name: "Ross",
+    score: 59
+  },
+  {
+    name: "Rachel",
+    score: 54
   }
 ];
 
@@ -137,24 +152,23 @@ Your Answer: `,
 ];
 
 function play(question, answer) {
-  var userAnswer = readlineSync.question(question);
+  var userAnswer = readlineSync.question(chalk.cyan(question));
   if (userAnswer === answer) {
-    console.log("Correct!");
     score += eachLevelPoints[currentLevel];
-    console.log("Your current Score: " + score);
+    console.log(chalk.greenBright("Correct! Your current Score: " + score));
   } else {
-    console.log("Wrong!");
+    console.log(chalk.red("Wrong! Your current Score: " + score));
   }
 }
 
 function playlevel(levelArray) {
-  console.log("-------");
-  console.log("Level-" + (currentLevel + 1));
-  console.log("-------");
+  console.log(chalk.magenta("-------"));
+  console.log(chalk.red("Level-" + (currentLevel + 1)));
+  console.log(chalk.magenta("-------"));
   for (var i = 0; i < levelArray.length; i++) {
     play(levelArray[i].question, levelArray[i].answer);
   }
-  console.log("Your final score for level: " + score);
+  // console.log(chalk.bold.yellowBright("Your final score for level: " + score));
 }
 
 function game() {
@@ -173,24 +187,46 @@ function game() {
     scoreToBeat += (levels[i].length - i) * eachLevelPoints[currentLevel];
 
     if (score >= scoreToBeat) {
-      console.log("YAY! You go to the next round!\n");
+      console.log(chalk.green("YAY! You go to the next round!\n"));
       currentLevel++;
     } else {
-      console.log("You didnt get enought score to qualify to the next round! Better luck next time!");
+      console.log(chalk.red("You didnt get enought score to qualify to the next round! Better luck next time!"));
       break;
     }
   }
 }
 
+function checkBeatHighScore(){
+  if(score >= highScore[0].score){
+    console.log(chalk.bold.greenBright("Yeay! You have beat the highest score set till now by "+highScore[0].name));
+  }else{
+    for (var i = 1; i < highScore.length; i++) {
+      if(score >= highScore[i].score){
+        if((i+1) === 2){
+          console.log(chalk.bold.cyanBright("You beat the " +(i+1)+ "nd highest score by " + highScore[i].name));
+        }else if((i+1)===3){
+          console.log(chalk.bold.cyanBright("You beat the " +(i+1)+ "rd highest score by " + highScore[i].name));
+        }else{
+          console.log(chalk.bold.cyanBright("You beat the " +(i+1)+ "th highest score by " + highScore[i].name));
+        }
+        return;
+      }
+    }
+    console.log(chalk.bold.redBright("You could not beat any high score but you can try again!"));
+  }
+}
+
 function printScore() {
-  console.log("----------------------------------");
-  console.log("Your final score for the quiz: " + score + "\nCheck out the highscores below: ");
+  console.log(chalk.cyanBright("----------------------------------------"));
+  console.log(chalk.magentaBright("Your final score for the quiz: " + score + "\nCheck out the highscores below: "));
 
   for (var i = 0; i < highScore.length; i++) {
-    console.log(highScore[i].name + " : " + highScore[i].score);
+    console.log(chalk.yellowBright(highScore[i].name + " : " + highScore[i].score));
   }
 
-  console.log("Ping me if you want your Score to be added!");
+  checkBeatHighScore();
+
+  console.log(chalk.blueBright("Ping me if you want your Score to be added!"));
 }
 
 game();
